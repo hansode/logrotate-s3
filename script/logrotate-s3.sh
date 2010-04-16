@@ -5,9 +5,10 @@ abs_path=$(cd $(dirname $0) && pwd)
 
 do_task() {
   [ $# = 1 ] || continue
-  target=$1
+  target=$1${SUFFIX}
   [ -f ${target} ] || { echo "no such file: ${target}"; exit 1; }
-  ${S3CMD} put ${BUCKET}:${PREFIX}/$(basename $1) $1
+  ${S3CMD} put ${BUCKET}:${PREFIX}/$(basename ${target}) ${target}
+  echo "==> ${BUCKET}:${PREFIX}/$(basename ${target})"
 }
 
 for i in $*; do
