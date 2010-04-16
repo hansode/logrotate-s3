@@ -1,0 +1,20 @@
+CONFIG_DIR=${abs_path}/../config
+VENDOR_DIR=${abs_path}/../vendor
+S3CMD=${VENDOR_DIR}/s3sync/s3cmd.rb
+
+# include confs
+for i in $(ls ${CONFIG_DIR} | egrep -v -w init | egrep -v ^_); do
+  [ -f ${CONFIG_DIR}/${i} ] && . ${CONFIG_DIR}/${i}
+done
+
+# validate
+needed="
+ AWS_ACCESS_KEY_ID
+ AWS_SECRET_ACCESS_KEY
+ BUCKET
+ S3CMD
+"
+
+for env_name in ${needed}; do
+  eval "[ -z \$${env_name} ] && { echo \${env_name} is empty.; exit 1; }"
+done
