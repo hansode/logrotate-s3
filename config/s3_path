@@ -1,0 +1,9 @@
+build_s3_path() {
+  [ $# = 1 ] || { exit 1; }
+  local_path=$1
+
+  # cut dirname
+  # echo ${BUCKET}:${PREFIX}/$(basename ${local_path})
+
+  echo ${BUCKET}:${PREFIX}${local_path}
+}
