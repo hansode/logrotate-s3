@@ -5,10 +5,12 @@ abs_path=$(cd $(dirname $0) && pwd)
 
 do_task() {
   [ $# = 1 ] || continue
-  target=$1${SUFFIX}
-  [ -f ${target} ] || { echo "no such file: ${target}"; exit 1; }
-  ${S3CMD} put ${BUCKET}:${PREFIX}/$(basename ${target}) ${target}
-  echo "==> ${BUCKET}:${PREFIX}/$(basename ${target})"
+  local_path=$1${SUFFIX}
+  [ -f ${local_path} ] || { echo "no such file: ${local_path}" >&2; exit 1; }
+
+  s3_path=$(build_s3_path ${local_path})
+  ${S3CMD} put ${s3_path} ${local_path}
+  echo "==> ${s3_path}"
 }
 
 for i in $*; do
